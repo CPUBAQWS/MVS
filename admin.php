@@ -2,7 +2,7 @@
 $ruleMap = [
   'single' => '單一票',
   'multi_unique' => '多票（不可重複）',
-  'multi-multi' => '多票（可重複）'
+  'multi_repeat' => '多票（可重複）'
 ];
 
 session_start();
