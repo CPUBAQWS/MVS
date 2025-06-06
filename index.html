@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Family Voting Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <div class="flex flex-col items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded shadow max-w-md w-full space-y-6">
+      <div>
+        <h1 class="text-xl font-bold mb-2 text-center">Admin Login</h1>
+        <form id="adminForm">
+          <input type="text" name="username" placeholder="Admin Username" required class="w-full border p-2 mb-2 rounded">
+          <input type="password" name="password" placeholder="Password" required class="w-full border p-2 mb-4 rounded">
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 w-full rounded">Login as Admin</button>
+        </form>
+      </div>
+      <hr class="my-4 border-gray-300">
+      <div>
+        <h1 class="text-xl font-bold mb-2 text-center">User Access</h1>
+        <form id="userForm">
+          <input type="text" name="code" placeholder="Enter Access Code" required class="w-full border p-2 mb-4 rounded">
+          <button type="submit" class="bg-green-600 text-white px-4 py-2 w-full rounded">Enter Voting</button>
+        </form>
+      </div>
+      <p id="status" class="mt-2 text-center text-sm text-red-600"></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("adminForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      fetch("auth.php", {
+        method: "POST",
+        body: formData,
+      })
+      .then(res => res.text())
+      .then(text => {
+        if (text === "admin") {
+          window.location.href = "admin.php";
+        } else {
+          document.getElementById("status").textContent = "Invalid admin credentials.";
+        }
+      });
+    });
+
+    document.getElementById("userForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      fetch("auth.php", {
+        method: "POST",
+        body: formData,
+      })
+      .then(res => res.text())
+      .then(text => {
+        if (text !== "invalid" && text !== "admin") {
+          window.location.href = "voting.php";
+        } else {
+          document.getElementById("status").textContent = "Invalid access code.";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "photo-contest": {
+    "name": "攝影獎",
+    "folder": "Files/1",
+    "voting_rule": "multi_unique",
+    "enabled": true
+  }
+}

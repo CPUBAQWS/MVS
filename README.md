@@ -1,81 +1,108 @@
-# Family Voting System
+# 🗳️ Family Media Voting Website
 
-This is a simple PHP-based web application designed for small groups (like families) to host media voting events. Users can vote on various types of entries (images, videos, PDFs, and text blocks) across different categories, each with customizable voting rules.
+A lightweight, privacy-respecting voting platform designed for families to browse and vote on shared media — such as photos, videos, PDFs, and creative content — organized by category.
 
-## 🔐 Authentication
-
-- **Admin Login:** Username & password stored in `admin.json`.
-- **User Access:** Codes are generated and stored in `users.json`, no registration required.
-- **Login Page:** Users and admins both log in from the main landing page.
-
-## 🗃️ Categories
-
-Each category:
-- Is assigned a **random unique ID** (folder name, e.g. `B2sIF`).
-- Has a **descriptive name** and a **voting rule**:
-  - `single`: 單一票
-  - `multi_unique`: 多票（不可重複）
-  - `multi_multi`: 多票（可重複）
-- Stores its media files in `Files/{CategoryID}/`.
-- Can be renamed or deleted by admin.
-
-## 📂 Media Support
-
-- **Allowed types:** `jpg`, `jpeg`, `png`, `gif`, `mp4`, `pdf`, text block entries.
-- **Blocked types:** `exe`, `zip`, `msi`, and others can be customized.
-- Admin can **upload/delete** files through the interface.
-- Media are previewable via modal popup.
-
-## 🗳️ Voting Logic
-
-- Each user can vote based on the category's rule.
-- Votes are stored in `votes/{user_code}.json`.
-- Users can **cancel** votes and reallocate (if rules allow).
-- Vote buttons automatically reflect current state and enforce limits client-side and server-side.
-
-## 🛠 Admin Panel
-
-Available via `admin.php` after login:
-- Manage categories (add, rename, delete).
-- Generate user codes.
-- View category list with folder, rules, and file count.
-- Upload or remove media.
-- All changes reflected immediately on the site.
-
-## 📱 Responsive Design
-
-- Designed using Tailwind CSS.
-- Layout adapts for phone, tablet, and desktop.
-- Voting pages use responsive grid (1 column on small screens, 2-4 on larger).
-
-## 📁 Folder Structure
-
-```
-family2025/
-├── Files/
-│   ├── B2sIF/              # Media folder for category
-│   │   └── image.jpg
-├── data/
-│   ├── categories.json     # Category definitions
-│   ├── admin.json          # Admin credentials
-│   └── users.json          # User access codes
-├── votes/
-│   └── [usercode].json     # Per-user voting data
-├── index.html              # Landing/login page
-├── admin.php               # Admin panel
-├── voting.php              # Main voting menu
-├── category.php            # Individual category view
-└── save_vote.php           # Vote backend logic
-```
-
-## ✅ Getting Started
-
-1. Upload the files to your PHP-capable web host.
-2. Set `data/` and `votes/` directories writable.
-3. Edit `admin.json` to set admin credentials.
-4. Use the admin panel to create categories and generate user codes.
-5. Share `index.html` link and access code with users.
+This project emphasizes ease of use, anonymous access, and zero dependencies on external databases.
 
 ---
 
-Enjoy your private and secure family voting site!
+## ✨ Features
+
+### ✅ Voting Experience
+- Simple, mobile-friendly interface
+- Vote for images, videos, PDFs, and text
+- Categories support different voting rules:
+  - One vote per user
+  - Multiple votes (only one per item)
+  - Multiple votes (allow repeats)
+- Users can **cancel votes**
+- Media can be **previewed or enlarged on click**
+
+### 🔐 Authentication
+- Access via **pre-assigned user codes**
+- No account registration required
+- Admin login for management tasks
+- Votes are tracked anonymously using access codes
+
+### 🗂 Categories & Media
+- Each category is mapped to a folder of media files
+- Supported formats: `jpg`, `png`, `mp4`, `pdf`, and more
+- Voting can be enabled or disabled per category
+- Invalid file types (e.g. `.zip`, `.exe`) are ignored
+
+### 🛠 Admin Capabilities (Planned)
+- Create and manage categories
+- Upload or remove media
+- View and export voting results
+- Full site backup
+
+---
+
+## 📁 Project Structure
+
+```
+/public/
+├── index.html          # Landing page for access code entry
+├── voting.html         # Category list with vote progress
+├── category.html       # Universal voting page (loaded via ?cat=...)
+├── Files/1/            # Media folder for a specific category
+
+/private/
+├── votes.json          # Tracks user votes
+├── users.json          # Stores valid access codes
+├── categories.json     # Category definitions and settings
+└── admin.json          # Admin credentials
+
+app.py                  # Flask backend (planned)
+```
+
+---
+
+## 🔒 Privacy & Simplicity
+- No email, name, or personal info required
+- Local JSON-based storage (no database)
+- All voting data stays on your own server or device
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend**: HTML + Tailwind CSS + JavaScript
+- **Backend** (planned): Python + Flask
+- **Storage**: Local JSON files (votes, users, categories)
+
+---
+
+## 🚧 Roadmap
+
+- [x] Dynamic voting page per category
+- [x] Anonymous voting with access code
+- [x] Cancel vote functionality
+- [ ] Flask backend for vote API
+- [ ] Admin dashboard
+- [ ] CSV/JSON result export
+- [ ] Media upload via web interface
+
+---
+
+## 📦 Deployment
+
+- Can run offline or on any basic web server
+- Backend (Flask) can be hosted locally or on platforms like PythonAnywhere or Replit
+
+---
+
+## 👨‍👩‍👧‍👦 Use Case Example
+
+Host a friendly **family contest** where everyone can:
+- Submit their favorite travel photos
+- Vote on each other’s cooking videos
+- Share and read essays or PDF albums
+- All without creating accounts or sharing personal data
+
+---
+
+## 📬 Feedback
+
+This project is built with simplicity and privacy in mind.  
+Suggestions, ideas, or improvements are always welcome!
