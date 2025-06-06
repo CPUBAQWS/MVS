@@ -1,4 +1,4 @@
-# Family Voting Web App
+# Family Voting System
 
 This is a simple PHP-based web application designed for small groups (like families) to host media voting events. Users can vote on various types of entries (images, videos, PDFs, and text blocks) across different categories, each with customizable voting rules.
 
