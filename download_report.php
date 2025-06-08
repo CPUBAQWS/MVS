@@ -36,6 +36,7 @@ echo "<!DOCTYPE html><html lang=\"zh\"><head><meta charset=\"UTF-8\"><title>Vote
 echo "<style>body{font-family:sans-serif;}table{border-collapse:collapse;margin-bottom:20px;}th,td{border:1px solid #ccc;padding:4px 8px;text-align:left;}th{background:#f0f0f0;}</style></head><body>";
 echo "<h1>投票結果報告</h1>";
 foreach ($result as $catName => $files) {
+    arsort($files); // sort files by vote count descending
     echo '<h2>' . htmlspecialchars($catName, ENT_QUOTES, 'UTF-8') . '</h2>';
     echo '<table><thead><tr><th>檔案</th><th>票數</th></tr></thead><tbody>';
     foreach ($files as $file => $count) {
