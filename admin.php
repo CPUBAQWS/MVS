@@ -35,6 +35,7 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
             <th class="px-4 py-2 text-left">資料夾</th>
             <th class="px-4 py-2 text-center">檔案數</th>
             <th class="px-4 py-2 text-left">投票規則</th>
+            <th class="px-4 py-2 text-center">狀態</th>
             <th class="px-4 py-2 text-left">改名</th>
             <th class="px-4 py-2 text-center">刪除</th>
           </tr>
