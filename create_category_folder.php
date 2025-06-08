@@ -24,7 +24,7 @@ mkdir(__DIR__ . "/Files/$folder", 0777, true);
 $catFile = __DIR__ . "/data/categories.json";
 $categories = file_exists($catFile) ? json_decode(file_get_contents($catFile), true) : [];
 
-$cat = ['name' => $name, 'folder' => $folder, 'rule' => $rule];
+$cat = ['name' => $name, 'folder' => $folder, 'rule' => $rule, 'allow_vote' => true];
 if ($rule === 'multi_unique') {
     $cat['max_votes'] = $maxVotes;
 }

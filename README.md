@@ -26,7 +26,7 @@ This project emphasizes ease of use, anonymous access, and zero dependencies on 
 ### 🗂 Categories & Media
 - Each category is mapped to a folder of media files
 - Supported formats: `jpg`, `png`, `mp4`, `pdf`, and more
-- Voting can be enabled or disabled per category
+- Categories can be set to "view only" or fully open for voting
 - Invalid file types (e.g. `.zip`, `.exe`) are ignored
 
 ### 🛠 Admin Capabilities (Planned)

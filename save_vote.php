@@ -20,9 +20,13 @@ $votes = file_exists($voteFile) ? json_decode(file_get_contents($voteFile), true
 
 $rule = 'multi_unique'; // fallback
 $maxVotes = 1;
+$allowVote = true;
 foreach ($categories as $c) {
     if ($c['folder'] === $category) {
         $rule = $c['rule'];
+        if (isset($c['allow_vote'])) {
+            $allowVote = (bool)$c['allow_vote'];
+        }
         if (isset($c['max_votes'])) {
             $maxVotes = intval($c['max_votes']);
         }
@@ -34,6 +38,11 @@ if ($rule === 'single') {
     $maxVotes = 1;
 } elseif ($rule === 'multi_unique' && $maxVotes < 1) {
     $maxVotes = 3;
+}
+
+if (!$allowVote) {
+    echo json_encode(['success' => false, 'message' => 'Voting disabled for this category']);
+    exit;
 }
 
 if (!isset($votes[$user])) {

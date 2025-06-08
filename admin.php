@@ -36,6 +36,7 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
             <th class="px-4 py-2 text-center">檔案數</th>
             <th class="px-4 py-2 text-left">投票規則</th>
             <th class="px-4 py-2 text-center">最多票數</th>
+            <th class="px-4 py-2 text-center">投票狀態</th>
             <th class="px-4 py-2 text-left">改名</th>
             <th class="px-4 py-2 text-center">刪除</th>
           </tr>
@@ -63,6 +64,16 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
                     echo '—';
                 }
               ?>
+            </td>
+            <td class="px-4 py-2 text-center">
+              <?php $allow = $cat['allow_vote'] ?? true; ?>
+              <div class="space-y-1">
+                <div class="text-sm"><?php echo $allow ? '可投票' : '僅瀏覽'; ?></div>
+                <form action="toggle_vote.php" method="POST">
+                  <input type="hidden" name="folder" value="<?php echo htmlspecialchars($cat['folder']); ?>">
+                  <button type="submit" class="bg-blue-500 text-white text-xs px-2 py-1 rounded">切換</button>
+                </form>
+              </div>
             </td>
             <td class="px-4 py-2 text-center">
               <form action="rename_category.php" method="POST" class="flex items-center space-x-2">
