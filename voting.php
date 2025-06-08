@@ -19,10 +19,14 @@ $available = [];
 
 foreach ($dirs as $dir) {
     $folderName = basename($dir);
+    $catData = $categoryMap[$folderName] ?? [];
+    if (isset($catData['enabled']) && !$catData['enabled']) {
+        continue; // skip disabled categories
+    }
     $available[] = [
         'folder' => $folderName,
-        'name' => $categoryMap[$folderName]['name'] ?? $folderName,
-        'rule' => $categoryMap[$folderName]['rule'] ?? 'N/A',
+        'name' => $catData['name'] ?? $folderName,
+        'rule' => $catData['rule'] ?? $catData['voting_rule'] ?? 'N/A',
         'count' => count(array_filter(scandir($dir), function($f) use ($dir) {
             return is_file("$dir/$f") && !in_array($f, ['.', '..']);
         }))

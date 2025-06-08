@@ -20,12 +20,19 @@ $votes = file_exists($votesFile) ? json_decode(file_get_contents($votesFile), tr
 
 $categoryName = $folder;
 $rule = 'multi_unique';
+$enabled = true;
 foreach ($categories as $c) {
-    if ($c['folder'] === $folder) {
+    if (($c['folder'] ?? '') === $folder) {
         $categoryName = $c['name'];
-        $rule = $c['rule'];
+        $rule = $c['rule'] ?? $c['voting_rule'] ?? 'multi_unique';
+        $enabled = $c['enabled'] ?? true;
         break;
     }
+}
+
+if (!$enabled) {
+    echo "此分類目前未開放投票";
+    exit;
 }
 
 $userVotes = $votes[$userCode][$folder] ?? [];

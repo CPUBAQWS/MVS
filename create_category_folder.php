@@ -23,7 +23,7 @@ mkdir(__DIR__ . "/Files/$folder", 0777, true);
 $catFile = __DIR__ . "/data/categories.json";
 $categories = file_exists($catFile) ? json_decode(file_get_contents($catFile), true) : [];
 
-$categories[] = ['name' => $name, 'folder' => $folder, 'rule' => $rule];
+$categories[] = ['name' => $name, 'folder' => $folder, 'rule' => $rule, 'enabled' => true];
 file_put_contents($catFile, json_encode($categories, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
 // Redirect using JavaScript
