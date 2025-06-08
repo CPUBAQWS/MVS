@@ -35,6 +35,7 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
             <th class="px-4 py-2 text-left">資料夾</th>
             <th class="px-4 py-2 text-center">檔案數</th>
             <th class="px-4 py-2 text-left">投票規則</th>
+            <th class="px-4 py-2 text-center">最多票數</th>
             <th class="px-4 py-2 text-center">狀態</th>
             <th class="px-4 py-2 text-left">改名</th>
             <th class="px-4 py-2 text-center">刪除</th>
@@ -51,6 +52,12 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
             <td class="px-4 py-2"><?php echo htmlspecialchars($cat['folder']); ?></td>
             <td class="px-4 py-2 text-center"><?php echo $fileCount; ?></td>
             <td class="px-4 py-2">
+              <?php echo htmlspecialchars($ruleMap[$cat['rule']] ?? $cat['rule']); ?>
+            </td>
+            <td class="px-4 py-2 text-center">
+              <?php echo ($cat['rule'] === 'multi_unique' && isset($cat['max_votes']))
+                  ? intval($cat['max_votes'])
+                  : '—'; ?>
               <?php
                 $label = $ruleMap[$cat['rule']] ?? $cat['rule'];
                 if ($cat['rule'] === 'multi_unique' && isset($cat['max_votes'])) {
