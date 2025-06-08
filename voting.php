@@ -26,6 +26,7 @@ foreach ($dirs as $dir) {
         'folder' => $folderName,
         'name' => $catData['name'] ?? $folderName,
         'rule' => $catData['rule'] ?? $catData['voting_rule'] ?? 'N/A',
+        'max_votes' => isset($catData['max_votes']) ? intval($catData['max_votes']) : null,
         'count' => count(array_filter(scandir($dir), function($f) use ($dir) {
             return is_file("$dir/$f") && !in_array($f, ['.', '..']);
         }))
@@ -53,7 +54,13 @@ foreach ($dirs as $dir) {
           <div class="bg-white rounded shadow p-4">
             <h3 class="text-md font-semibold text-blue-800"><?php echo htmlspecialchars($cat['name']); ?></h3>
             <p class="text-sm text-gray-600 mb-1">投稿數量: <?php echo $cat['count']; ?> 個</p>
-            <p class="text-sm text-gray-600 mb-2">規則: <?= $ruleMap[$cat['rule']] ?? $cat['rule'] ?></p>
+            <?php
+              $ruleLabel = $ruleMap[$cat['rule']] ?? $cat['rule'];
+              if ($cat['rule'] === 'multi_unique' && isset($cat['max_votes'])) {
+                  $ruleLabel .= ' (最多 ' . intval($cat['max_votes']) . ' 票)';
+              }
+            ?>
+            <p class="text-sm text-gray-600 mb-2">規則: <?= htmlspecialchars($ruleLabel) ?></p>
             <a href="category.php?category=<?php echo urlencode($cat['folder']); ?>" class="text-blue-600 hover:underline">進入投票</a>
           </div>
         <?php endforeach; ?>
