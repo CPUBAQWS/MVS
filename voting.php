@@ -67,19 +67,6 @@ foreach ($dirs as $dir) {
       </div>
     </section>
 
-    <section>
-      <button onclick="document.getElementById('myVotes').classList.toggle('hidden')" class="bg-blue-600 text-white px-4 py-2 rounded">
-        查看我的投票
-      </button>
-      <div id="myVotes" class="hidden mt-4 bg-white p-4 rounded shadow">
-        <h3 class="text-md font-bold mb-2">我的投票</h3>
-        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">
-          <li><strong>攝影獎:</strong> Summer.jpg / Fish.jpg</li>
-          <li><strong>散文:</strong> Travel Notes</li>
-          <li><strong>創意:</strong> Felting Work</li>
-        </ul>
-      </div>
-    </section>
   </main>
 </body>
 </html>
