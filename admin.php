@@ -1,8 +1,7 @@
 <?php
 $ruleMap = [
   'single' => '單一票',
-  'multi_unique' => '多票（不可重複）',
-  'multi-multi' => '多票（可重複）'
+  'multi_unique' => '多票（不可重複）'
 ];
 
 session_start();
@@ -50,7 +49,15 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
             <td class="px-4 py-2"><?php echo htmlspecialchars($cat['name']); ?></td>
             <td class="px-4 py-2"><?php echo htmlspecialchars($cat['folder']); ?></td>
             <td class="px-4 py-2 text-center"><?php echo $fileCount; ?></td>
-            <td class="px-4 py-2"><?php echo htmlspecialchars($ruleMap[$cat['rule']] ?? $cat['rule']); ?></td>
+            <td class="px-4 py-2">
+              <?php
+                $label = $ruleMap[$cat['rule']] ?? $cat['rule'];
+                if ($cat['rule'] === 'multi_unique' && isset($cat['max_votes'])) {
+                    $label .= ' (最多 ' . intval($cat['max_votes']) . ' 票)';
+                }
+                echo htmlspecialchars($label);
+              ?>
+            </td>
             <td class="px-4 py-2 text-center">
               <form action="rename_category.php" method="POST" class="flex items-center space-x-2">
                 <input type="hidden" name="folder" value="<?php echo htmlspecialchars($cat['folder']); ?>">
@@ -79,11 +86,14 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
         </div>
         <div class="mb-2">
           <label>投票規則：</label>
-          <select name="rule" class="border p-2 rounded w-full" required>
+          <select name="rule" id="ruleSelect" class="border p-2 rounded w-full" required>
             <option value="single">每人一票</option>
             <option value="multi_unique">可投多票，不可重複</option>
-            <option value="multi_repeat">可投多票，可重複</option>
           </select>
+        </div>
+        <div class="mb-2" id="maxVotesWrapper" style="display:none;">
+          <label>最多投幾票：</label>
+          <input type="number" name="max_votes" id="maxVotes" value="3" min="1" class="border p-2 rounded w-full">
         </div>
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">建立分類</button>
       </form>
@@ -127,5 +137,14 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
       <?php endif; ?>
     </section>
   </main>
+  <script>
+    const ruleSelect = document.getElementById('ruleSelect');
+    const maxWrapper = document.getElementById('maxVotesWrapper');
+    function toggleMaxField() {
+      maxWrapper.style.display = ruleSelect.value === 'multi_unique' ? 'block' : 'none';
+    }
+    ruleSelect.addEventListener('change', toggleMaxField);
+    toggleMaxField();
+  </script>
 </body>
 </html>
