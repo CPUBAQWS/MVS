@@ -145,7 +145,7 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
 
     <section class="bg-white p-4 rounded shadow mt-6 max-w-xl mx-auto">
       <h2 class="text-lg font-bold mb-2">下載投票報告</h2>
-      <p class="text-sm text-gray-600 mb-4">產生並下載 CSV 格式的投票結果</p>
+      <p class="text-sm text-gray-600 mb-4">產生並下載 HTML 格式的投票結果</p>
       <a href="download_report.php" class="bg-blue-600 text-white px-4 py-2 rounded">下載報告</a>
     </section>
   </main>
