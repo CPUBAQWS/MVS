@@ -27,6 +27,7 @@ foreach ($dirs as $dir) {
         'name' => $catData['name'] ?? $folderName,
         'rule' => $catData['rule'] ?? $catData['voting_rule'] ?? 'N/A',
         'max_votes' => isset($catData['max_votes']) ? intval($catData['max_votes']) : null,
+        'allow_vote' => $catData['allow_vote'] ?? true,
         'count' => count(array_filter(scandir($dir), function($f) use ($dir) {
             return is_file("$dir/$f") && !in_array($f, ['.', '..']);
         }))
@@ -61,6 +62,9 @@ foreach ($dirs as $dir) {
               }
             ?>
             <p class="text-sm text-gray-600 mb-2">規則: <?= htmlspecialchars($ruleLabel) ?></p>
+            <p class="text-xs mb-2 <?php echo $cat['allow_vote'] ? 'text-green-600' : 'text-red-600'; ?>">
+              <?php echo $cat['allow_vote'] ? '可投票' : '僅瀏覽'; ?>
+            </p>
             <a href="category.php?category=<?php echo urlencode($cat['folder']); ?>" class="text-blue-600 hover:underline">進入投票</a>
           </div>
         <?php endforeach; ?>

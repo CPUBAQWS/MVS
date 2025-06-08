@@ -21,10 +21,14 @@ $votes = file_exists($votesFile) ? json_decode(file_get_contents($votesFile), tr
 $categoryName = $folder;
 $rule = 'multi_unique';
 $maxVotes = 1;
+$allowVote = true;
 foreach ($categories as $c) {
     if (($c['folder'] ?? '') === $folder) {
         $categoryName = $c['name'];
         $rule = $c['rule'];
+        if (isset($c['allow_vote'])) {
+            $allowVote = (bool)$c['allow_vote'];
+        }
         if (isset($c['max_votes'])) {
             $maxVotes = intval($c['max_votes']);
         }
@@ -59,6 +63,9 @@ $userVotes = $votes[$userCode][$folder] ?? [];
 <section class="p-4 max-w-6xl mx-auto text-center">
   <p class="text-gray-700 mb-2">你已使用 <strong id="usedVotes"><?php echo count($userVotes); ?></strong> / <?php echo $maxVotes; ?> 票。</p>
   <p class="text-sm text-gray-600">規則：<?php echo $rule; ?></p>
+  <?php if (!$allowVote): ?>
+    <p class="text-red-600 text-sm mt-1">此分類目前僅供瀏覽，無法投票。</p>
+  <?php endif; ?>
 </section>
 
 <section class="p-4 mx-auto grid gap-4 grid-cols-1 sm:max-w-md md:max-w-3xl lg:max-w-6xl sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -84,8 +91,8 @@ foreach ($files as $file):
     <?php else: ?>
       <div class="text-sm text-gray-800 whitespace-pre-line max-h-40 overflow-y-auto"><?php echo htmlspecialchars(file_get_contents($dir . '/' . $file)); ?></div>
     <?php endif; ?>
-    <button class="vote-btn mt-2 bg-blue-600 text-white px-3 py-1 rounded w-full text-sm"
-            data-file="<?php echo $file; ?>">
+    <button class="vote-btn mt-2 bg-blue-600 text-white px-3 py-1 rounded w-full text-sm <?php echo !$allowVote ? 'opacity-50' : ''; ?>"
+            data-file="<?php echo $file; ?>" <?php echo !$allowVote ? 'disabled' : ''; ?>>
       <?php echo $voted ? '取消投票' : '投我一票'; ?>
     </button>
   </div>
@@ -97,6 +104,7 @@ const voteBtns = document.querySelectorAll(".vote-btn");
 let userVotes = <?php echo json_encode($userVotes); ?>;
 const rule = "<?php echo $rule; ?>";
 const maxVotes = <?php echo $maxVotes; ?>;
+const allowVote = <?php echo $allowVote ? 'true' : 'false'; ?>;
 
 function updateUI() {
   document.getElementById("usedVotes").textContent = userVotes.length;
@@ -105,7 +113,7 @@ function updateUI() {
     const isVoted = userVotes.includes(file);
     btn.textContent = isVoted ? "取消投票" : "投我一票";
     const limitReached = userVotes.length >= maxVotes && !isVoted;
-    const disable = (rule === "single" && limitReached) || (rule === "multi_unique" && limitReached);
+    const disable = !allowVote || (rule === "single" && limitReached) || (rule === "multi_unique" && limitReached);
     btn.classList.toggle("opacity-50", disable);
     btn.disabled = disable;
   });
@@ -113,6 +121,10 @@ function updateUI() {
 
 voteBtns.forEach(btn => {
   btn.addEventListener("click", () => {
+    if (!allowVote) {
+      alert("此分類目前無法投票");
+      return;
+    }
     const file = btn.dataset.file;
     const isVoted = userVotes.includes(file);
     const action = isVoted ? 'cancel' : 'vote';
