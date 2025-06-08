@@ -19,11 +19,21 @@ $categories = file_exists($catFile) ? json_decode(file_get_contents($catFile), t
 $votes = file_exists($voteFile) ? json_decode(file_get_contents($voteFile), true) : [];
 
 $rule = 'multi_unique'; // fallback
+$maxVotes = 1;
 foreach ($categories as $c) {
     if ($c['folder'] === $category) {
         $rule = $c['rule'];
+        if (isset($c['max_votes'])) {
+            $maxVotes = intval($c['max_votes']);
+        }
         break;
     }
+}
+
+if ($rule === 'single') {
+    $maxVotes = 1;
+} elseif ($rule === 'multi_unique' && $maxVotes < 1) {
+    $maxVotes = 3;
 }
 
 if (!isset($votes[$user])) {
@@ -47,10 +57,12 @@ if ($action === 'cancel') {
     }
 } elseif ($action === 'vote') {
     $canVote = true;
-    if ($rule === 'single' && count($userVotes) >= 1) {
+    if ($rule === 'single' && count($userVotes) >= $maxVotes) {
         $canVote = false;
-    } elseif ($rule === 'multi_unique' && in_array($item, $userVotes)) {
-        $canVote = false;
+    } elseif ($rule === 'multi_unique') {
+        if (in_array($item, $userVotes) || count($userVotes) >= $maxVotes) {
+            $canVote = false;
+        }
     } elseif ($rule === 'multi_repeat') {
         $canVote = true;
     }

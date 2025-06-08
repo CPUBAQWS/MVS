@@ -14,7 +14,6 @@ This project emphasizes ease of use, anonymous access, and zero dependencies on 
 - Categories support different voting rules:
   - `single` - One vote per user
   - `multi_unique` - Multiple votes (only one per item)
-  - `multi_repeat` - Multiple votes (allow repeats)
 - Users can **cancel votes**
 - Media can be **previewed or enlarged on click**
 
