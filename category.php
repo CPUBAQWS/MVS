@@ -20,12 +20,22 @@ $votes = file_exists($votesFile) ? json_decode(file_get_contents($votesFile), tr
 
 $categoryName = $folder;
 $rule = 'multi_unique';
+$maxVotes = 1;
 foreach ($categories as $c) {
     if ($c['folder'] === $folder) {
         $categoryName = $c['name'];
         $rule = $c['rule'];
+        if (isset($c['max_votes'])) {
+            $maxVotes = intval($c['max_votes']);
+        }
         break;
     }
+}
+
+if ($rule === 'single') {
+    $maxVotes = 1;
+} elseif ($rule === 'multi_unique' && $maxVotes < 1) {
+    $maxVotes = 3;
 }
 
 $userVotes = $votes[$userCode][$folder] ?? [];
@@ -47,7 +57,7 @@ $userVotes = $votes[$userCode][$folder] ?? [];
 </nav>
 
 <section class="p-4 max-w-6xl mx-auto text-center">
-  <p class="text-gray-700 mb-2">你已使用 <strong id="usedVotes"><?php echo count($userVotes); ?></strong> 票。</p>
+  <p class="text-gray-700 mb-2">你已使用 <strong id="usedVotes"><?php echo count($userVotes); ?></strong> / <?php echo $maxVotes; ?> 票。</p>
   <p class="text-sm text-gray-600">規則：<?php echo $rule; ?></p>
 </section>
 
@@ -86,6 +96,7 @@ foreach ($files as $file):
 const voteBtns = document.querySelectorAll(".vote-btn");
 let userVotes = <?php echo json_encode($userVotes); ?>;
 const rule = "<?php echo $rule; ?>";
+const maxVotes = <?php echo $maxVotes; ?>;
 
 function updateUI() {
   document.getElementById("usedVotes").textContent = userVotes.length;
@@ -93,8 +104,10 @@ function updateUI() {
     const file = btn.dataset.file;
     const isVoted = userVotes.includes(file);
     btn.textContent = isVoted ? "取消投票" : "投我一票";
-    btn.classList.toggle("opacity-50", rule === "single" && userVotes.length >= 1 && !isVoted);
-    btn.disabled = rule === "single" && userVotes.length >= 1 && !isVoted;
+    const limitReached = userVotes.length >= maxVotes && !isVoted;
+    const disable = (rule === "single" && limitReached) || (rule === "multi_unique" && limitReached);
+    btn.classList.toggle("opacity-50", disable);
+    btn.disabled = disable;
   });
 }
 
@@ -105,13 +118,19 @@ voteBtns.forEach(btn => {
     const action = isVoted ? 'cancel' : 'vote';
 
     if (action === 'vote') {
-      if (rule === "single" && userVotes.length >= 1) {
+      if (rule === "single" && userVotes.length >= maxVotes) {
         alert("你只能投一票");
         return;
       }
-      if (rule === "multi_unique" && userVotes.includes(file)) {
-        alert("你不能重複投相同作品");
-        return;
+      if (rule === "multi_unique") {
+        if (userVotes.includes(file)) {
+          alert("你不能重複投相同作品");
+          return;
+        }
+        if (userVotes.length >= maxVotes) {
+          alert("你的票數已用完");
+          return;
+        }
       }
     }
 
