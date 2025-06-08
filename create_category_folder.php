@@ -7,6 +7,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
 $name = $_POST['name'] ?? '';
 $rule = $_POST['rule'] ?? '';
+$maxVotes = isset($_POST['max_votes']) ? max(1, intval($_POST['max_votes'])) : 1;
 
 if (!$name || !$rule) {
     echo "<script>alert('Missing category name or rule'); window.location.href = 'admin.php';</script>";
@@ -23,7 +24,11 @@ mkdir(__DIR__ . "/Files/$folder", 0777, true);
 $catFile = __DIR__ . "/data/categories.json";
 $categories = file_exists($catFile) ? json_decode(file_get_contents($catFile), true) : [];
 
-$categories[] = ['name' => $name, 'folder' => $folder, 'rule' => $rule];
+$cat = ['name' => $name, 'folder' => $folder, 'rule' => $rule];
+if ($rule === 'multi_unique') {
+    $cat['max_votes'] = $maxVotes;
+}
+$categories[] = $cat;
 file_put_contents($catFile, json_encode($categories, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
 // Redirect using JavaScript
