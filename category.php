@@ -22,7 +22,7 @@ $categoryName = $folder;
 $rule = 'multi_unique';
 $maxVotes = 1;
 foreach ($categories as $c) {
-    if ($c['folder'] === $folder) {
+    if (($c['folder'] ?? '') === $folder) {
         $categoryName = $c['name'];
         $rule = $c['rule'];
         if (isset($c['max_votes'])) {
