@@ -88,6 +88,8 @@ app.py                  # Flask backend (planned)
 
 - Can run offline or on any basic web server
 - Backend (Flask) can be hosted locally or on platforms like PythonAnywhere or Replit
+- Add the provided `.htaccess` file at the project root to block direct access to
+  the `data/` and `Files/` directories when using Apache.
 
 ---
 
