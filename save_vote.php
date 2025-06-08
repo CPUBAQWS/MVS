@@ -63,8 +63,6 @@ if ($action === 'cancel') {
         if (in_array($item, $userVotes) || count($userVotes) >= $maxVotes) {
             $canVote = false;
         }
-    } elseif ($rule === 'multi_repeat') {
-        $canVote = true;
     }
 
     if ($canVote) {

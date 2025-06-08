@@ -13,7 +13,7 @@ This project emphasizes ease of use, anonymous access, and zero dependencies on 
 - Vote for images, videos, PDFs, and text
 - Categories support different voting rules:
   - `single` - One vote per user
-  - `multi_unique` - Multiple votes (only one per item)
+  - `multi_unique` - Multiple votes (only one per item, limit configurable)
 - Users can **cancel votes**
 - Media can be **previewed or enlarged on click**
 
