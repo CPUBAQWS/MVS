@@ -1,0 +1,11 @@
+# Protect sensitive directories from direct web access
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Deny any request for the data or Files directories
+  RewriteRule ^(?:data|Files)/ - [F,L]
+</IfModule>
+
+# Fallback for servers without mod_rewrite
+<FilesMatch "^(?:data|Files)/">
+  Require all denied
+</FilesMatch>
