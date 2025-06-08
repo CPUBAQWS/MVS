@@ -36,6 +36,7 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
             <th class="px-4 py-2 text-center">檔案數</th>
             <th class="px-4 py-2 text-left">投票規則</th>
             <th class="px-4 py-2 text-center">最多票數</th>
+            <th class="px-4 py-2 text-center">狀態</th>
             <th class="px-4 py-2 text-left">改名</th>
             <th class="px-4 py-2 text-center">刪除</th>
           </tr>
@@ -57,6 +58,13 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
               <?php echo ($cat['rule'] === 'multi_unique' && isset($cat['max_votes']))
                   ? intval($cat['max_votes'])
                   : '—'; ?>
+              <?php
+                $label = $ruleMap[$cat['rule']] ?? $cat['rule'];
+                if ($cat['rule'] === 'multi_unique' && isset($cat['max_votes'])) {
+                    $label .= ' (最多 ' . intval($cat['max_votes']) . ' 票)';
+                }
+                echo htmlspecialchars($label);
+              ?>
             </td>
             <td class="px-4 py-2 text-center">
               <form action="rename_category.php" method="POST" class="flex items-center space-x-2">
