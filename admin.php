@@ -1,7 +1,7 @@
 <?php
 $ruleMap = [
   'single' => '單一票',
-  'multi_unique' => '多票（不可重複）'
+  'multi_unique' => '多票（不可重複）',
 ];
 
 session_start();
@@ -35,6 +35,7 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
             <th class="px-4 py-2 text-left">資料夾</th>
             <th class="px-4 py-2 text-center">檔案數</th>
             <th class="px-4 py-2 text-left">投票規則</th>
+            <th class="px-4 py-2 text-center">狀態</th>
             <th class="px-4 py-2 text-left">改名</th>
             <th class="px-4 py-2 text-center">刪除</th>
           </tr>
@@ -57,6 +58,15 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
                 }
                 echo htmlspecialchars($label);
               ?>
+            </td>
+            <td class="px-4 py-2 text-center">
+              <form action="toggle_category.php" method="POST">
+                <input type="hidden" name="folder" value="<?php echo htmlspecialchars($cat['folder']); ?>">
+                <?php $isEnabled = $cat['enabled'] ?? true; ?>
+                <button type="submit" class="<?php echo $isEnabled ? 'bg-green-600' : 'bg-gray-400'; ?> text-white text-sm px-2 py-1 rounded">
+                  <?php echo $isEnabled ? '停用' : '啟用'; ?>
+                </button>
+              </form>
             </td>
             <td class="px-4 py-2 text-center">
               <form action="rename_category.php" method="POST" class="flex items-center space-x-2">

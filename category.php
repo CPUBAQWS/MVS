@@ -21,13 +21,16 @@ $votes = file_exists($votesFile) ? json_decode(file_get_contents($votesFile), tr
 $categoryName = $folder;
 $rule = 'multi_unique';
 $maxVotes = 1;
+$enabled = true;
 foreach ($categories as $c) {
-    if ($c['folder'] === $folder) {
+    if (($c['folder'] ?? '') === $folder) {
         $categoryName = $c['name'];
         $rule = $c['rule'];
         if (isset($c['max_votes'])) {
             $maxVotes = intval($c['max_votes']);
         }
+        $rule = $c['rule'] ?? $c['voting_rule'] ?? 'multi_unique';
+        $enabled = $c['enabled'] ?? true;
         break;
     }
 }
@@ -36,6 +39,9 @@ if ($rule === 'single') {
     $maxVotes = 1;
 } elseif ($rule === 'multi_unique' && $maxVotes < 1) {
     $maxVotes = 3;
+if (!$enabled) {
+    echo "此分類目前未開放投票";
+    exit;
 }
 
 $userVotes = $votes[$userCode][$folder] ?? [];

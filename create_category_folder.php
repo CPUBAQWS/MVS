@@ -29,6 +29,7 @@ if ($rule === 'multi_unique') {
     $cat['max_votes'] = $maxVotes;
 }
 $categories[] = $cat;
+$categories[] = ['name' => $name, 'folder' => $folder, 'rule' => $rule, 'enabled' => true];
 file_put_contents($catFile, json_encode($categories, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
 // Redirect using JavaScript

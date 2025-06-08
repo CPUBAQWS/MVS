@@ -46,7 +46,15 @@ if (!isset($votes[$user][$category])) {
 $userVotes = $votes[$user][$category];
 
 if ($action === 'cancel') {
-    $votes[$user][$category] = array_values(array_filter($userVotes, fn($v) => $v !== $item));
+    if ($rule === 'multi_repeat') {
+        $index = array_search($item, $userVotes);
+        if ($index !== false) {
+            unset($userVotes[$index]);
+            $votes[$user][$category] = array_values($userVotes);
+        }
+    } else {
+        $votes[$user][$category] = array_values(array_filter($userVotes, fn($v) => $v !== $item));
+    }
 } elseif ($action === 'vote') {
     $canVote = true;
     if ($rule === 'single' && count($userVotes) >= $maxVotes) {
@@ -55,6 +63,8 @@ if ($action === 'cancel') {
         if (in_array($item, $userVotes) || count($userVotes) >= $maxVotes) {
             $canVote = false;
         }
+    } elseif ($rule === 'multi_repeat') {
+        $canVote = true;
     }
 
     if ($canVote) {
