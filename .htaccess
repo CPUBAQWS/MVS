@@ -2,10 +2,10 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   # Deny any request for the data or Files directories
-  RewriteRule ^(?:data|Files)/ - [F,L]
+  RewriteRule ^(?:data)/ - [F,L]
 </IfModule>
 
 # Fallback for servers without mod_rewrite
-<FilesMatch "^(?:data|Files)/">
+<FilesMatch "^(?:data)/">
   Require all denied
 </FilesMatch>
