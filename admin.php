@@ -1,47 +1,48 @@
 <?php
-$ruleMap = [
-  'single' => '單一票',
-  'multi_unique' => '多票（不可重複）'
-];
-
 session_start();
+require_once __DIR__ . '/inc/i18n.php';
+$ruleMap = [
+  'single' => t('one_vote'),
+  'multi_unique' => t('multi_unique')
+];
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: index.html");
+    header("Location: index.php");
     exit;
 }
 
 $categoryFile = __DIR__ . '/data/categories.json';
 $categories = file_exists($categoryFile) ? json_decode(file_get_contents($categoryFile), true) : [];
+$langAttr = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'zh';
 ?>
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="<?php echo htmlspecialchars($langAttr); ?>">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin 控制台</title>
+  <title><?php echo t('admin_dashboard'); ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-800">
   <header class="bg-blue-700 text-white p-4 text-center text-xl font-semibold">
-    管理介面
+    <?php echo t('admin_interface'); ?>
   </header>
   <nav class="max-w-6xl mx-auto mt-4 px-4">
-    <a href="index.html" class="text-blue-600 hover:underline">&larr; 回到首頁</a>
+    <a href="index.php" class="text-blue-600 hover:underline">&larr; <?php echo t('back_home'); ?></a>
   </nav>
   <main class="max-w-6xl mx-auto p-6 space-y-8">
 
     <section class="bg-white p-4 rounded shadow">
-      <h2 class="text-lg font-bold mb-4">現有分類</h2>
+      <h2 class="text-lg font-bold mb-4"><?php echo t('existing_categories'); ?></h2>
       <table class="w-full table-auto border-collapse">
         <thead>
           <tr class="bg-gray-200">
-            <th class="px-4 py-2 text-left">顯示名稱</th>
-            <th class="px-4 py-2 text-left">資料夾</th>
-            <th class="px-4 py-2 text-center">檔案數</th>
-            <th class="px-4 py-2 text-left">投票規則</th>
-            <th class="px-4 py-2 text-center">最多票數</th>
-            <th class="px-4 py-2 text-center">投票狀態</th>
-            <th class="px-4 py-2 text-left">改名</th>
-            <th class="px-4 py-2 text-center">刪除</th>
+            <th class="px-4 py-2 text-left"><?php echo t('display_name'); ?></th>
+            <th class="px-4 py-2 text-left"><?php echo t('folder'); ?></th>
+            <th class="px-4 py-2 text-center"><?php echo t('file_count'); ?></th>
+            <th class="px-4 py-2 text-left"><?php echo t('voting_rule'); ?></th>
+            <th class="px-4 py-2 text-center"><?php echo t('max_votes'); ?></th>
+            <th class="px-4 py-2 text-center"><?php echo t('voting_status'); ?></th>
+            <th class="px-4 py-2 text-left"><?php echo t('rename'); ?></th>
+            <th class="px-4 py-2 text-center"><?php echo t('delete'); ?></th>
           </tr>
         </thead>
         <tbody>
@@ -60,9 +61,9 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
             <td class="px-4 py-2 text-center">
               <?php
                 if ($cat['rule'] === 'single') {
-                    echo '單一票';
+                    echo t('one_vote');
                 } elseif ($cat['rule'] === 'multi_unique' && isset($cat['max_votes'])) {
-                    echo '最多 ' . intval($cat['max_votes']) . ' 票';
+                    echo sprintf(t('max_votes_format'), intval($cat['max_votes']));
                 } else {
                     echo '—';
                 }
@@ -71,24 +72,24 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
             <td class="px-4 py-2 text-center">
               <?php $allow = $cat['allow_vote'] ?? true; ?>
               <div class="space-y-1">
-                <div class="text-sm"><?php echo $allow ? '可投票' : '僅瀏覽'; ?></div>
+                <div class="text-sm"><?php echo $allow ? t('voting_enabled') : t('view_only'); ?></div>
                 <form action="toggle_vote.php" method="POST">
                   <input type="hidden" name="folder" value="<?php echo htmlspecialchars($cat['folder']); ?>">
-                  <button type="submit" class="bg-blue-500 text-white text-xs px-2 py-1 rounded">切換</button>
+                  <button type="submit" class="bg-blue-500 text-white text-xs px-2 py-1 rounded"><?php echo t('toggle'); ?></button>
                 </form>
               </div>
             </td>
             <td class="px-4 py-2 text-center">
               <form action="rename_category.php" method="POST" class="flex items-center space-x-2">
                 <input type="hidden" name="folder" value="<?php echo htmlspecialchars($cat['folder']); ?>">
-                <input type="text" name="new_name" placeholder="新分類名稱" class="border p-1 rounded text-sm" required>
-                <button type="submit" class="bg-yellow-500 text-white text-sm px-2 py-1 rounded">改名</button>
+                <input type="text" name="new_name" placeholder="<?php echo t('new_category_name'); ?>" class="border p-1 rounded text-sm" required>
+                <button type="submit" class="bg-yellow-500 text-white text-sm px-2 py-1 rounded"><?php echo t('rename'); ?></button>
               </form>
             </td>
             <td class="px-4 py-2 text-center">
-              <form action="delete_category.php" method="POST" onsubmit="return confirm('確認要刪除此分類及其所有檔案？');">
+              <form action="delete_category.php" method="POST" onsubmit="return confirm('<?php echo t('delete'); ?>?');">
                 <input type="hidden" name="folder" value="<?php echo htmlspecialchars($cat['folder']); ?>">
-                <button type="submit" class="bg-red-500 text-white text-sm px-3 py-1 rounded">刪除</button>
+                <button type="submit" class="bg-red-500 text-white text-sm px-3 py-1 rounded"><?php echo t('delete'); ?></button>
               </form>
             </td>
           </tr>
@@ -98,33 +99,33 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
     </section>
 
     <section class="bg-white p-4 rounded shadow mt-6 max-w-xl mx-auto">
-      <h2 class="text-lg font-bold mb-2">新增分類</h2>
+      <h2 class="text-lg font-bold mb-2"><?php echo t('add_category'); ?></h2>
       <form method="POST" action="create_category_folder.php">
         <div class="mb-2">
-          <label>分類名稱：</label>
+          <label><?php echo t('category_name'); ?></label>
           <input type="text" name="name" class="border p-2 rounded w-full" required>
         </div>
         <div class="mb-2">
-          <label>投票規則：</label>
+          <label><?php echo t('select_rule'); ?></label>
           <select name="rule" id="ruleSelect" class="border p-2 rounded w-full" required>
-            <option value="single">每人一票</option>
-            <option value="multi_unique">可投多票，不可重複</option>
+            <option value="single"><?php echo t('one_vote'); ?></option>
+            <option value="multi_unique"><?php echo t('multi_unique'); ?></option>
           </select>
         </div>
         <div class="mb-2" id="maxVotesWrapper" style="display:none;">
-          <label>最多投幾票：</label>
+          <label><?php echo t('max_votes_label'); ?></label>
           <input type="number" name="max_votes" id="maxVotes" value="3" min="1" class="border p-2 rounded w-full">
         </div>
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">建立分類</button>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded"><?php echo t('create_category'); ?></button>
       </form>
     </section>
 
     <section class="bg-white p-4 rounded shadow mt-6 max-w-xl mx-auto">
-      <h2 class="text-lg font-bold mb-2">產生使用者代碼</h2>
+      <h2 class="text-lg font-bold mb-2"><?php echo t('generate_codes'); ?></h2>
       <form method="POST">
-        <label class="block mb-2">數量：</label>
+        <label class="block mb-2"><?php echo t('quantity'); ?></label>
         <input type="number" name="count" value="5" class="border p-2 rounded w-32 mb-4">
-        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">產生</button>
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded"><?php echo t('generate'); ?></button>
       </form>
       <?php
         $generated = [];
@@ -147,7 +148,7 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
       ?>
       <?php if (!empty($generated)): ?>
         <div class="mt-4">
-          <h3 class="font-semibold">產生的代碼：</h3>
+          <h3 class="font-semibold"><?php echo t('generated_codes'); ?></h3>
           <ul class="list-disc list-inside text-sm mt-2">
             <?php foreach ($generated as $code): ?>
               <li><code><?php echo $code; ?></code></li>
@@ -158,9 +159,9 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
     </section>
 
     <section class="bg-white p-4 rounded shadow mt-6 max-w-xl mx-auto">
-      <h2 class="text-lg font-bold mb-2">下載投票報告</h2>
-      <p class="text-sm text-gray-600 mb-4">產生並下載 HTML 格式的投票結果</p>
-      <a href="download_report.php" class="bg-blue-600 text-white px-4 py-2 rounded">下載報告</a>
+      <h2 class="text-lg font-bold mb-2"><?php echo t('download_report'); ?></h2>
+      <p class="text-sm text-gray-600 mb-4"><?php echo t('download_report_desc'); ?></p>
+      <a href="download_report.php" class="bg-blue-600 text-white px-4 py-2 rounded"><?php echo t('download'); ?></a>
     </section>
   </main>
   <script>

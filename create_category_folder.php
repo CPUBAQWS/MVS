@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['admin_logged_in'])) {
-    header("Location: index.html");
+    header("Location: index.php");
     exit;
 }
 
@@ -9,8 +9,9 @@ $name = $_POST['name'] ?? '';
 $rule = $_POST['rule'] ?? '';
 $maxVotes = isset($_POST['max_votes']) ? max(1, intval($_POST['max_votes'])) : 1;
 
+require_once __DIR__ . '/inc/i18n.php';
 if (!$name || !$rule) {
-    echo "<script>alert('Missing category name or rule'); window.location.href = 'admin.php';</script>";
+    echo "<script>alert(" . json_encode(t('missing_category_or_rule')) . "); window.location.href = 'admin.php';</script>";
     exit;
 }
 

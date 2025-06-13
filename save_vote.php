@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/inc/i18n.php';
 header('Content-Type: application/json');
 
 $user = $_POST['user'] ?? '';
@@ -8,7 +9,7 @@ $item = $_POST['item'] ?? '';
 $action = $_POST['action'] ?? 'vote';
 
 if (!$user || !$category || !$item) {
-    echo json_encode(['success' => false, 'message' => 'Missing fields']);
+    echo json_encode(['success' => false, 'message' => t('missing_fields')]);
     exit;
 }
 
@@ -41,7 +42,7 @@ if ($rule === 'single') {
 }
 
 if (!$allowVote) {
-    echo json_encode(['success' => false, 'message' => 'Voting disabled for this category']);
+    echo json_encode(['success' => false, 'message' => t('voting_disabled')]);
     exit;
 }
 
@@ -77,7 +78,7 @@ if ($action === 'cancel') {
     if ($canVote) {
         $votes[$user][$category][] = $item;
     } else {
-        echo json_encode(['success' => false, 'message' => 'Voting rule violated']);
+        echo json_encode(['success' => false, 'message' => t('voting_rule_violated')]);
         exit;
     }
 }

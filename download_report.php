@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/inc/i18n.php';
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header('HTTP/1.1 403 Forbidden');
     exit('Forbidden');
@@ -32,13 +33,14 @@ foreach ($categories as $cat) {
 header('Content-Type: text/html; charset=UTF-8');
 header('Content-Disposition: attachment; filename="vote_report.html"');
 
-echo "<!DOCTYPE html><html lang=\"zh\"><head><meta charset=\"UTF-8\"><title>Vote Report</title>";
+$langAttr = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'zh';
+echo "<!DOCTYPE html><html lang=\"$langAttr\"><head><meta charset=\"UTF-8\"><title>" . t('vote_report_title') . "</title>";
 echo "<style>body{font-family:sans-serif;}table{border-collapse:collapse;margin-bottom:20px;}th,td{border:1px solid #ccc;padding:4px 8px;text-align:left;}th{background:#f0f0f0;}</style></head><body>";
-echo "<h1>投票結果報告</h1>";
+echo "<h1>" . t('vote_results_report') . "</h1>";
 foreach ($result as $catName => $files) {
     arsort($files); // sort files by vote count descending
     echo '<h2>' . htmlspecialchars($catName, ENT_QUOTES, 'UTF-8') . '</h2>';
-    echo '<table><thead><tr><th>檔案</th><th>票數</th></tr></thead><tbody>';
+    echo '<table><thead><tr><th>' . t('file') . '</th><th>' . t('votes') . '</th></tr></thead><tbody>';
     foreach ($files as $file => $count) {
         echo '<tr><td>' . htmlspecialchars($file, ENT_QUOTES, 'UTF-8') . '</td><td>' . $count . '</td></tr>';
     }

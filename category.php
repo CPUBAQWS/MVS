@@ -1,14 +1,15 @@
 <?php
 session_start();
+require_once __DIR__ . '/inc/i18n.php';
 if (!isset($_SESSION['user_code'])) {
-    header("Location: index.html");
+    header("Location: index.php");
     exit;
 }
 
 $userCode = $_SESSION['user_code'];
 $folder = $_GET['category'] ?? '';
 if (!$folder || !is_dir(__DIR__ . '/Files/' . $folder)) {
-    echo "無效的分類";
+    echo t('invalid_category');
     exit;
 }
 
@@ -43,9 +44,10 @@ if ($rule === 'single') {
 }
 
 $userVotes = $votes[$userCode][$folder] ?? [];
+$langAttr = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'zh';
 ?>
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="<?php echo htmlspecialchars($langAttr); ?>">
 <head>
   <meta charset="UTF-8">
   <title><?php echo htmlspecialchars($categoryName); ?></title>
@@ -57,14 +59,14 @@ $userVotes = $votes[$userCode][$folder] ?? [];
 </header>
 
 <nav class="max-w-6xl mx-auto mt-4 px-4">
-  <a href="voting.php" class="text-blue-600 hover:underline">&larr; 回到投票主頁</a>
+  <a href="voting.php" class="text-blue-600 hover:underline">&larr; <?php echo t('back_voting_home'); ?></a>
 </nav>
 
 <section class="p-4 max-w-6xl mx-auto text-center">
-  <p class="text-gray-700 mb-2">你已使用 <strong id="usedVotes"><?php echo count($userVotes); ?></strong> / <?php echo $maxVotes; ?> 票。</p>
-  <p class="text-sm text-gray-600">規則：<?php echo $rule; ?></p>
+  <p class="text-gray-700 mb-2"><?php echo sprintf(t('used_votes'), count($userVotes), $maxVotes); ?></p>
+  <p class="text-sm text-gray-600"><?php echo sprintf(t('rule_colon'), $rule); ?></p>
   <?php if (!$allowVote): ?>
-    <p class="text-red-600 text-sm mt-1">此分類目前僅供瀏覽，無法投票。</p>
+    <p class="text-red-600 text-sm mt-1"><?php echo t('category_view_only'); ?></p>
   <?php endif; ?>
 </section>
 
@@ -87,7 +89,7 @@ foreach ($files as $file):
       </video>
     <?php elseif ($ext === 'pdf'): ?>
       <iframe src="<?php echo $path; ?>#toolbar=0&view=FitH" class="w-full h-40 rounded mb-2"></iframe>
-      <a href="<?php echo $path; ?>" href="javascript:void(0)" onclick="openModal(this.href)" class="text-blue-600 hover:underline text-sm">📄 開啟PDF全文</a>
+      <a href="<?php echo $path; ?>" href="javascript:void(0)" onclick="openModal(this.href)" class="text-blue-600 hover:underline text-sm"><?php echo t('open_pdf'); ?></a>
     <?php elseif ($ext === 'yt'): ?>
       <?php
         $ytLink = trim(file_get_contents($dir . '/' . $file));
@@ -102,7 +104,7 @@ foreach ($files as $file):
     <?php endif; ?>
     <button class="vote-btn mt-2 bg-blue-600 text-white px-3 py-1 rounded w-full text-sm <?php echo !$allowVote ? 'opacity-50' : ''; ?>"
             data-file="<?php echo $file; ?>" <?php echo !$allowVote ? 'disabled' : ''; ?>>
-      <?php echo $voted ? '取消投票' : '投我一票'; ?>
+      <?php echo $voted ? t('cancel_vote') : t('vote_for_me'); ?>
     </button>
   </div>
 <?php endforeach; ?>
@@ -120,7 +122,7 @@ function updateUI() {
   voteBtns.forEach(btn => {
     const file = btn.dataset.file;
     const isVoted = userVotes.includes(file);
-    btn.textContent = isVoted ? "取消投票" : "投我一票";
+    btn.textContent = isVoted ? <?php echo json_encode(t('cancel_vote')); ?> : <?php echo json_encode(t('vote_for_me')); ?>;
     const limitReached = userVotes.length >= maxVotes && !isVoted;
     const disable = !allowVote || (rule === "single" && limitReached) || (rule === "multi_unique" && limitReached);
     btn.classList.toggle("opacity-50", disable);
@@ -131,7 +133,7 @@ function updateUI() {
 voteBtns.forEach(btn => {
   btn.addEventListener("click", () => {
     if (!allowVote) {
-      alert("此分類目前無法投票");
+      alert(<?php echo json_encode(t('vote_disabled_msg')); ?>);
       return;
     }
     const file = btn.dataset.file;
@@ -140,16 +142,16 @@ voteBtns.forEach(btn => {
 
     if (action === 'vote') {
       if (rule === "single" && userVotes.length >= maxVotes) {
-        alert("你只能投一票");
+        alert(<?php echo json_encode(t('vote_once_msg')); ?>);
         return;
       }
       if (rule === "multi_unique") {
         if (userVotes.includes(file)) {
-          alert("你不能重複投相同作品");
+          alert(<?php echo json_encode(t('no_repeat_vote_msg')); ?>);
           return;
         }
         if (userVotes.length >= maxVotes) {
-          alert("你的票數已用完");
+          alert(<?php echo json_encode(t('votes_used_up_msg')); ?>);
           return;
         }
       }
@@ -171,7 +173,7 @@ voteBtns.forEach(btn => {
         userVotes = data.votes;
         updateUI();
       } else {
-        alert(data.message || "操作失敗");
+        alert(data.message || <?php echo json_encode(t('action_failed')); ?>);
       }
     });
   });

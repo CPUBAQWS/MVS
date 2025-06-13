@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/inc/i18n.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $folder = $_POST['folder'] ?? '';
     $file = $_POST['file'] ?? '';
@@ -7,9 +8,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (file_exists($target)) {
         unlink($target);
-        echo json_encode(["success" => true, "message" => "已刪除"]);
+        echo json_encode(["success" => true, "message" => t('file_deleted')]);
     } else {
-        echo json_encode(["success" => false, "message" => "找不到檔案"]);
+        echo json_encode(["success" => false, "message" => t('file_not_found')]);
     }
 }
 ?>
