@@ -21,7 +21,7 @@ return [
     'enter_voting' => 'Enter Voting',
     'invalid_category' => 'Invalid category',
     'back_voting_home' => 'Back to voting home',
-    'used_votes' => 'You have used <strong>%d</strong> / %d votes.',
+    'used_votes' => 'You have used <strong id="usedVotes">%d</strong> / %d votes.',
     'rule_colon' => 'Rule: %s',
     'category_view_only' => 'Voting is currently disabled for this category.',
     'open_pdf' => 'Open full PDF',

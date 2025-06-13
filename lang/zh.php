@@ -21,7 +21,7 @@ return [
     'enter_voting' => '進入投票',
     'invalid_category' => '無效的分類',
     'back_voting_home' => '回到投票主頁',
-    'used_votes' => '你已使用 <strong>%d</strong> / %d 票。',
+    'used_votes' => '你已使用 <strong id="usedVotes">%d</strong> / %d 票。',
     'rule_colon' => '規則：%s',
     'category_view_only' => '此分類目前僅供瀏覽，無法投票。',
     'open_pdf' => '📄 開啟PDF全文',
