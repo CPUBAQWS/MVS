@@ -1,118 +1,71 @@
 # 🗳️ Family Media Voting
 
-A lightweight, privacy-respecting voting platform designed for families or friends to browse and vote on shared media, such as photos, videos, PDFs, and creative content organized by category.
-
-This project emphasizes ease of use, anonymous access, and zero dependencies on external databases.
+A lightweight, self-hosted voting platform for families or friends to share and vote on media files. The project is written in **PHP** and stores all data in JSON files so there is no external database requirement.
 
 ---
 
 ## ✨ Features
 
-### ✅ Voting Experience
-- Simple, mobile-friendly interface
-- Vote for images, videos, PDFs, YouTube links, and text
-- Categories support different voting rules:
-  - `single` - One vote per user
-  - `multi_unique` - Multiple votes (only one per item, limit configurable)
-- Users can **cancel votes**
-- Media can be **previewed or enlarged on click** (including YouTube embeds)
-
-### 🔐 Authentication
-- Access via **pre-assigned user codes**
-- No account registration required
-- Admin login for management tasks
-- Votes are tracked anonymously using access codes
-
-### 🗂 Categories & Media
-- Each category is mapped to a folder of media files
-- Supported formats: `jpg`, `png`, `mp4`, `pdf`, `.yt` (YouTube links), and more
-- Categories can be set to "view only" or fully open for voting
-- Invalid file types (e.g. `.zip`, `.exe`) are ignored
-
-### 🛠 Admin Capabilities (Planned)
-- Create and manage categories
-- Upload or remove media
-- View and export voting results
-- Full site backup
+- Mobile friendly interface
+- Vote on images, videos, PDFs, YouTube links and text snippets
+- Supports two voting rules:
+  - `single` – one vote per user
+  - `multi_unique` – multiple votes per category with no duplicates
+- Users can cancel votes
+- Media previews with image zoom, video playback and PDF/YouTube embeds
+- English and Chinese translations (switchable on every page)
+- Admin interface to create categories, upload/remove media and generate user codes
+- Download vote results as an HTML report
 
 ---
 
-## 📁 Project Structure
+## 📁 Directory Layout
 
 ```
-/public/
-├── index.php           # Landing page for access code entry
-├── voting.html         # Category list with vote progress
-├── category.html       # Universal voting page (loaded via ?cat=...)
-├── Files/1/            # Media folder for a specific category
-
-/private/
-├── votes.json          # Tracks user votes
-├── users.json          # Stores valid access codes
-├── categories.json     # Category definitions and settings
-└── admin.json          # Admin credentials
-
-app.py                  # Flask backend (planned)
+/                Project root
+├── index.php            # Login page for users and admin
+├── voting.php           # Category list page
+├── category.php         # Voting page for a single category
+├── admin.php            # Admin dashboard
+├── data/                # JSON storage (users, votes, categories, admin credentials)
+├── lang/                # Language files (en.php, zh.php)
+├── inc/                 # Helper library (i18n)
+├── Files/               # Uploaded media (created at runtime, not tracked)
+└── .htaccess            # Security rules for Apache
 ```
 
 ---
 
-## 🔒 Privacy & Simplicity
-- No email, name, or personal info required
-- Local JSON-based storage (no database)
-- All voting data stays on your own server or device
+## 🛠 Requirements
+
+- PHP 8 or later
+- A web server such as Apache or the built‑in PHP development server
+
+### Running locally
+
+```bash
+php -S localhost:8000
+```
+Then open `http://localhost:8000` in your browser.
+
+Admin credentials are defined in `data/admin.json`. Use the dashboard to create categories and generate access codes for participants.
 
 ---
 
-## 🛠 Tech Stack
+## 🔒 Security Notes
 
-- **Frontend**: HTML + Tailwind CSS + JavaScript
-- **Backend** (planned): Python + Flask
-- **Storage**: Local JSON files (votes, users, categories)
+The provided `.htaccess` file blocks direct access to the `data/` directory and disables directory listings. If you deploy with another server, apply similar rules to keep vote data private.
 
 ---
-
-## 🚧 Roadmap
-
-- [x] Dynamic voting page per category
-- [x] Anonymous voting with access code
-- [x] Cancel vote functionality
-- [ ] Flask backend for vote API
-- [ ] Admin dashboard
-- [ ] CSV/JSON result export
-- [ ] Media upload via web interface
-
----
-
-## 📦 Deployment
-
-- Can run offline or on any basic web server
-- Backend (Flask) can be hosted locally or on platforms like PythonAnywhere or Replit
-- Add the provided `.htaccess` file at the project root to block direct access to
-  the `data/` and `Files/` directories when using Apache.
-
----
-
-## 👨‍👩‍👧‍👦 Use Case Example
-
-Host a friendly **family contest** where everyone can:
-- Submit their favorite travel photos
-- Vote on each other’s cooking videos
-- Share and read essays or PDF albums
-- All without creating accounts or sharing personal data
-
----
-
-## 📬 Feedback
-
-This project is built with simplicity and privacy in mind.  
-Suggestions, ideas, or improvements are always welcome!
 
 ## 🌐 Adding New Languages
 
-Translations live in the `lang/` directory. Each file returns an associative
-array of translation keys. To add a language:
+Translation files live in the `lang/` directory and return an associative PHP array. To add a language:
 
-1. Create a new file like `lang/fr.php` that returns an array of strings.
-2. Set `$_SESSION['lang']` or a `lang` cookie to the language code.
+1. Create a new file like `lang/fr.php` that returns an array of translated strings.
+2. Set `$_SESSION['lang']` or the `lang` cookie to the language code.
 3. The `t()` helper in `inc/i18n.php` will load the appropriate file.
+
+---
+
+This project aims to stay simple and self‑contained. Suggestions or improvements are welcome!
