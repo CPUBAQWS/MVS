@@ -1,4 +1,4 @@
-# 🗳️ Family Voting System (FVS)
+# 🗳️ Media Voting System (MVS)
 
 A lightweight, self-hosted voting platform for families or friends to share and vote on media files. The project is written in **PHP** and stores all data in JSON files so there is no external database requirement.
 
