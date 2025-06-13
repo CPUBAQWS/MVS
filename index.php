@@ -1,7 +1,9 @@
 <?php
 session_start();
 require_once __DIR__.'/inc/i18n.php';
-$langAttr = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'zh';
+$langAttr = get_lang();
+$languages = array_map(function($f){return basename($f,'.php');}, glob(__DIR__.'/lang/*.php'));
+$langNames = ['en' => t('english'), 'zh' => t('chinese')];
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars($langAttr); ?>">
@@ -13,6 +15,14 @@ $langAttr = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'zh';
 <body class="bg-gray-100 text-gray-800">
   <div class="flex flex-col items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded shadow max-w-md w-full space-y-6">
+      <div class="text-right">
+        <label class="mr-2"><?php echo t('language'); ?></label>
+        <select id="langSelect" class="border p-1 rounded">
+          <?php foreach ($languages as $code): ?>
+            <option value="<?php echo $code; ?>" <?php echo $code === $langAttr ? 'selected' : ''; ?>><?php echo htmlspecialchars($langNames[$code] ?? $code); ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
       <div>
         <h1 class="text-xl font-bold mb-2 text-center"><?php echo t('user_login'); ?></h1>
         <form id="userForm">
@@ -68,6 +78,11 @@ $langAttr = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'zh';
           document.getElementById('status').textContent = <?php echo json_encode(t('code_error')); ?>;
         }
       });
+    });
+
+    document.getElementById('langSelect').addEventListener('change', function(e) {
+      fetch('set_lang.php?lang=' + encodeURIComponent(e.target.value))
+        .then(() => location.reload());
     });
   </script>
 </body>

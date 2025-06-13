@@ -12,7 +12,9 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
 $categoryFile = __DIR__ . '/data/categories.json';
 $categories = file_exists($categoryFile) ? json_decode(file_get_contents($categoryFile), true) : [];
-$langAttr = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'zh';
+$langAttr = get_lang();
+$languages = array_map(function($f){return basename($f,'.php');}, glob(__DIR__.'/lang/*.php'));
+$langNames = ['en' => t('english'), 'zh' => t('chinese')];
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars($langAttr); ?>">
@@ -25,8 +27,16 @@ $langAttr = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'zh';
   <header class="bg-blue-700 text-white p-4 text-center text-xl font-semibold">
     <?php echo t('admin_interface'); ?>
   </header>
-  <nav class="max-w-6xl mx-auto mt-4 px-4">
+  <nav class="max-w-6xl mx-auto mt-4 px-4 flex justify-between items-center">
     <a href="index.php" class="text-blue-600 hover:underline">&larr; <?php echo t('back_home'); ?></a>
+    <div>
+      <label class="mr-2"><?php echo t('language'); ?></label>
+      <select id="langSelect" class="border p-1 rounded">
+        <?php foreach ($languages as $code): ?>
+          <option value="<?php echo $code; ?>" <?php echo $code === $langAttr ? 'selected' : ''; ?>><?php echo htmlspecialchars($langNames[$code] ?? $code); ?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
   </nav>
   <main class="max-w-6xl mx-auto p-6 space-y-8">
 
@@ -172,6 +182,11 @@ $langAttr = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'zh';
     }
     ruleSelect.addEventListener('change', toggleMaxField);
     toggleMaxField();
+
+    document.getElementById('langSelect').addEventListener('change', function(e) {
+      fetch('set_lang.php?lang=' + encodeURIComponent(e.target.value))
+        .then(() => location.reload());
+    });
   </script>
 </body>
 </html>
