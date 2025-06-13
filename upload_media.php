@@ -1,10 +1,11 @@
 <?php
+require_once __DIR__ . '/inc/i18n.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $folder = $_POST['folder'] ?? '';
     $uploadDir = __DIR__ . "/Files/" . basename($folder) . "/";
 
     if (!is_dir($uploadDir)) {
-        echo json_encode(["success" => false, "message" => "資料夾不存在"]);
+        echo json_encode(["success" => false, "message" => t('folder_not_exist')]);
         exit;
     }
 
@@ -13,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $blocked = ['exe', 'zip', 'msi'];
 
     if (!isset($_FILES['media'])) {
-        echo json_encode(["success" => false, "message" => "未選擇檔案"]);
+        echo json_encode(["success" => false, "message" => t('no_file_selected')]);
         exit;
     }
 
@@ -21,20 +22,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
     if (in_array($ext, $blocked)) {
-        echo json_encode(["success" => false, "message" => "禁止上傳此副檔名"]);
+        echo json_encode(["success" => false, "message" => t('blocked_extension')]);
         exit;
     }
 
     if (!in_array($ext, $allowed)) {
-        echo json_encode(["success" => false, "message" => "不支援的檔案類型"]);
+        echo json_encode(["success" => false, "message" => t('unsupported_type')]);
         exit;
     }
 
     $target = $uploadDir . basename($file['name']);
     if (move_uploaded_file($file['tmp_name'], $target)) {
-        echo json_encode(["success" => true, "message" => "成功上傳"]);
+        echo json_encode(["success" => true, "message" => t('upload_success')]);
     } else {
-        echo json_encode(["success" => false, "message" => "上傳失敗"]);
+        echo json_encode(["success" => false, "message" => t('upload_failed')]);
     }
 }
 ?>

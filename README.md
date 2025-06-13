@@ -41,7 +41,7 @@ This project emphasizes ease of use, anonymous access, and zero dependencies on 
 
 ```
 /public/
-├── index.html          # Landing page for access code entry
+├── index.php           # Landing page for access code entry
 ├── voting.html         # Category list with vote progress
 ├── category.html       # Universal voting page (loaded via ?cat=...)
 ├── Files/1/            # Media folder for a specific category
@@ -107,3 +107,12 @@ Host a friendly **family contest** where everyone can:
 
 This project is built with simplicity and privacy in mind.  
 Suggestions, ideas, or improvements are always welcome!
+
+## 🌐 Adding New Languages
+
+Translations live in the `lang/` directory. Each file returns an associative
+array of translation keys. To add a language:
+
+1. Create a new file like `lang/fr.php` that returns an array of strings.
+2. Set `$_SESSION['lang']` or a `lang` cookie to the language code.
+3. The `t()` helper in `inc/i18n.php` will load the appropriate file.

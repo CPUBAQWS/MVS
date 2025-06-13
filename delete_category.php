@@ -3,8 +3,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $folder = $_POST["folder"] ?? "";
     $dataFile = __DIR__ . "/data/categories.json";
 
+require_once __DIR__ . '/inc/i18n.php';
     if (!$folder || !file_exists($dataFile)) {
-        echo json_encode(["success" => false, "message" => "Missing folder or data file."]);
+        echo json_encode(["success" => false, "message" => t('missing_folder_data')]);
         exit;
     }
 
@@ -24,9 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         rmdir($dir);
     }
 
-    echo json_encode(["success" => true, "message" => "分類與檔案已成功刪除"]);
+    echo json_encode(["success" => true, "message" => t('category_delete_success')]);
 } else {
-    echo json_encode(["success" => false, "message" => "Invalid request"]);
+    echo json_encode(["success" => false, "message" => t('invalid_request')]);
 }
 header("Location: admin.php");
 exit;

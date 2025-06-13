@@ -1,8 +1,10 @@
-<?php session_start(); if (!isset($_SESSION['user_code'])) { header('Location: index.html'); exit; } ?>
 <?php
+session_start();
+if (!isset($_SESSION['user_code'])) { header('Location: index.php'); exit; }
+require_once __DIR__ . '/inc/i18n.php';
 $ruleMap = [
-  'single' => '單一票',
-  'multi_unique' => '多票（不可重複）'
+  'single' => t('one_vote'),
+  'multi_unique' => t('multi_unique')
 ];
 
 $categoryFile = __DIR__ . '/data/categories.json';
@@ -33,42 +35,43 @@ foreach ($dirs as $dir) {
         }))
     ];
 }
+$langAttr = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'zh';
 ?>
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="<?php echo htmlspecialchars($langAttr); ?>">
 <head>
   <meta charset="UTF-8">
-  <title>投票頁面</title>
+  <title><?php echo t('voting_page_title'); ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-800">
 
   <header class="bg-blue-600 text-white p-4 text-center text-xl font-semibold">
-    家族投票系統
+    <?php echo t('family_voting_system'); ?>
   </header>
   <nav class="max-w-4xl mx-auto mt-4 px-4">
-    <a href="index.html" class="text-blue-600 hover:underline">&larr; 回到首頁</a>
+    <a href="index.php" class="text-blue-600 hover:underline">&larr; <?php echo t('back_home'); ?></a>
   </nav>
 
   <main class="max-w-4xl mx-auto p-6 space-y-8">
     <section>
-      <h2 class="text-lg font-bold mb-4">可用投票分類</h2>
+      <h2 class="text-lg font-bold mb-4"><?php echo t('available_categories'); ?></h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <?php foreach ($available as $cat): ?>
           <div class="bg-white rounded shadow p-4">
             <h3 class="text-md font-semibold text-black"><?php echo htmlspecialchars($cat['name']); ?></h3>
-            <p class="text-sm text-gray-600 mb-1">投稿數量: <?php echo $cat['count']; ?> 個</p>
+            <p class="text-sm text-gray-600 mb-1"><?php echo sprintf(t('submissions_count'), $cat['count']); ?></p>
             <?php
               $ruleLabel = $ruleMap[$cat['rule']] ?? $cat['rule'];
               if ($cat['rule'] === 'multi_unique' && isset($cat['max_votes'])) {
-                  $ruleLabel .= ' (最多 ' . intval($cat['max_votes']) . ' 票)';
+                  $ruleLabel .= ' (' . sprintf(t('max_votes_format'), intval($cat['max_votes'])) . ')';
               }
             ?>
-            <p class="text-sm text-gray-600 mb-2">規則: <?= htmlspecialchars($ruleLabel) ?></p>
+            <p class="text-sm text-gray-600 mb-2"><?php echo sprintf(t('rule_label'), htmlspecialchars($ruleLabel)); ?></p>
             <p class="text-xs mb-2 <?php echo $cat['allow_vote'] ? 'text-green-600' : 'text-red-600'; ?>">
-              <?php echo $cat['allow_vote'] ? '可投票' : '僅瀏覽'; ?>
+              <?php echo $cat['allow_vote'] ? t('voting_enabled') : t('view_only'); ?>
             </p>
-            <a href="category.php?category=<?php echo urlencode($cat['folder']); ?>" class="text-blue-600 font-bold hover:underline">進入投票</a>
+            <a href="category.php?category=<?php echo urlencode($cat['folder']); ?>" class="text-blue-600 font-bold hover:underline"><?php echo t('enter_voting'); ?></a>
           </div>
         <?php endforeach; ?>
       </div>
