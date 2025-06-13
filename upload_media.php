@@ -8,7 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $allowed = ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'pdf'];
+    // Allow common image/video formats plus custom YouTube link files (.yt)
+    $allowed = ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'pdf', 'yt'];
     $blocked = ['exe', 'zip', 'msi'];
 
     if (!isset($_FILES['media'])) {
