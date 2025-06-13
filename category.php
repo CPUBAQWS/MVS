@@ -44,7 +44,7 @@ if ($rule === 'single') {
 }
 
 $userVotes = $votes[$userCode][$folder] ?? [];
-$langAttr = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'zh';
+$langAttr = get_lang();
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars($langAttr); ?>">
