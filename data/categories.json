@@ -1,10 +1,3 @@
 {
-  "photo-contest": {
-    "name": "攝影獎",
-    "folder": "1",
-    "rule": "multi_unique",
-    "max_votes": 3,
-    "enabled": true,
-    "allow_vote": true
-  }
+
 }
