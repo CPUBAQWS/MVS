@@ -78,5 +78,8 @@ return [
     'unsupported_type' => 'Unsupported file type',
     'upload_success' => 'Upload successful',
     'upload_failed' => 'Upload failed',
-    'missing_category_or_rule' => 'Missing category name or rule'
+    'missing_category_or_rule' => 'Missing category name or rule',
+    'language' => 'Language',
+    'english' => 'English',
+    'chinese' => '中文'
 ];

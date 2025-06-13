@@ -78,5 +78,8 @@ return [
     'unsupported_type' => '不支援的檔案類型',
     'upload_success' => '成功上傳',
     'upload_failed' => '上傳失敗',
-    'missing_category_or_rule' => '缺少分類名稱或規則'
+    'missing_category_or_rule' => '缺少分類名稱或規則',
+    'language' => '語言',
+    'english' => 'English',
+    'chinese' => '中文'
 ];

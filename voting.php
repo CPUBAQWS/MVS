@@ -35,7 +35,7 @@ foreach ($dirs as $dir) {
         }))
     ];
 }
-$langAttr = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'zh';
+$langAttr = get_lang();
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars($langAttr); ?>">
