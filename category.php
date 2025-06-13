@@ -88,6 +88,15 @@ foreach ($files as $file):
     <?php elseif ($ext === 'pdf'): ?>
       <iframe src="<?php echo $path; ?>#toolbar=0&view=FitH" class="w-full h-40 rounded mb-2"></iframe>
       <a href="<?php echo $path; ?>" href="javascript:void(0)" onclick="openModal(this.href)" class="text-blue-600 hover:underline text-sm">📄 開啟PDF全文</a>
+    <?php elseif ($ext === 'yt'): ?>
+      <?php
+        $ytLink = trim(file_get_contents($dir . '/' . $file));
+        preg_match('/(?:youtu\.be\/|v=|\/embed\/)([A-Za-z0-9_-]{11})/', $ytLink, $matches);
+        $ytId = $matches[1] ?? $ytLink;
+      ?>
+      <div class="relative w-full h-40 mb-2 rounded cursor-pointer" onclick="openModal('yt:<?php echo $ytId; ?>')">
+        <iframe src="https://www.youtube.com/embed/<?php echo $ytId; ?>" class="w-full h-full rounded pointer-events-none"></iframe>
+      </div>
     <?php else: ?>
       <div class="text-sm text-gray-800 whitespace-pre-line max-h-40 overflow-y-auto"><?php echo htmlspecialchars(file_get_contents($dir . '/' . $file)); ?></div>
     <?php endif; ?>
@@ -183,15 +192,37 @@ updateUI();
 function openModal(filePath) {
   const modal = document.getElementById("modal");
   const modalBody = document.getElementById("modal-body");
-  const ext = filePath.split('.').pop().toLowerCase();
 
   let content = "";
-  if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
-    content = `<img src="${filePath}" class="max-h-[80vh] w-auto rounded">`;
-  } else if (['mp4', 'mov'].includes(ext)) {
-    content = '<video src="' + filePath + '" controls autoplay class="max-h-[80vh] w-full rounded"></video>';
-  } else if (ext === 'pdf') {
-    content = '<iframe src="' + filePath + '#toolbar=0" class="w-full h-[80vh] rounded"></iframe>';
+  const isYT = filePath.startsWith('yt:') || filePath.includes('youtube.com') || filePath.includes('youtu.be');
+  if (isYT) {
+    let id = '';
+    if (filePath.startsWith('yt:')) {
+      id = filePath.slice(3);
+    } else {
+      try {
+        const url = new URL(filePath);
+        if (url.hostname.includes('youtu.be')) {
+          id = url.pathname.slice(1);
+        } else if (url.searchParams.get('v')) {
+          id = url.searchParams.get('v');
+        } else {
+          id = url.pathname.split('/').pop();
+        }
+      } catch (e) {
+        id = filePath;
+      }
+    }
+    content = `<iframe src="https://www.youtube.com/embed/${id}" class="w-full h-[80vh] rounded" allowfullscreen></iframe>`;
+  } else {
+    const ext = filePath.split('.').pop().toLowerCase();
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
+      content = `<img src="${filePath}" class="max-h-[80vh] w-auto rounded">`;
+    } else if (['mp4', 'mov'].includes(ext)) {
+      content = '<video src="' + filePath + '" controls autoplay class="max-h-[80vh] w-full rounded"></video>';
+    } else if (ext === 'pdf') {
+      content = '<iframe src="' + filePath + '#toolbar=0" class="w-full h-[80vh] rounded"></iframe>';
+    }
   }
 
   modalBody.innerHTML = content;

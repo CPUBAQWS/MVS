@@ -10,12 +10,12 @@ This project emphasizes ease of use, anonymous access, and zero dependencies on 
 
 ### ✅ Voting Experience
 - Simple, mobile-friendly interface
-- Vote for images, videos, PDFs, and text
+- Vote for images, videos, PDFs, YouTube links, and text
 - Categories support different voting rules:
   - `single` - One vote per user
   - `multi_unique` - Multiple votes (only one per item, limit configurable)
 - Users can **cancel votes**
-- Media can be **previewed or enlarged on click**
+- Media can be **previewed or enlarged on click** (including YouTube embeds)
 
 ### 🔐 Authentication
 - Access via **pre-assigned user codes**
@@ -25,7 +25,7 @@ This project emphasizes ease of use, anonymous access, and zero dependencies on 
 
 ### 🗂 Categories & Media
 - Each category is mapped to a folder of media files
-- Supported formats: `jpg`, `png`, `mp4`, `pdf`, and more
+- Supported formats: `jpg`, `png`, `mp4`, `pdf`, `.yt` (YouTube links), and more
 - Categories can be set to "view only" or fully open for voting
 - Invalid file types (e.g. `.zip`, `.exe`) are ignored
 
