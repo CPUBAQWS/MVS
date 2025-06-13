@@ -46,6 +46,9 @@ foreach ($dirs as $dir) {
   <header class="bg-blue-600 text-white p-4 text-center text-xl font-semibold">
     家族投票系統
   </header>
+  <nav class="max-w-4xl mx-auto mt-4 px-4">
+    <a href="index.html" class="text-blue-600 hover:underline">&larr; 回到首頁</a>
+  </nav>
 
   <main class="max-w-4xl mx-auto p-6 space-y-8">
     <section>
@@ -53,7 +56,7 @@ foreach ($dirs as $dir) {
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <?php foreach ($available as $cat): ?>
           <div class="bg-white rounded shadow p-4">
-            <h3 class="text-md font-semibold text-blue-800"><?php echo htmlspecialchars($cat['name']); ?></h3>
+            <h3 class="text-md font-semibold text-black"><?php echo htmlspecialchars($cat['name']); ?></h3>
             <p class="text-sm text-gray-600 mb-1">投稿數量: <?php echo $cat['count']; ?> 個</p>
             <?php
               $ruleLabel = $ruleMap[$cat['rule']] ?? $cat['rule'];
@@ -65,7 +68,7 @@ foreach ($dirs as $dir) {
             <p class="text-xs mb-2 <?php echo $cat['allow_vote'] ? 'text-green-600' : 'text-red-600'; ?>">
               <?php echo $cat['allow_vote'] ? '可投票' : '僅瀏覽'; ?>
             </p>
-            <a href="category.php?category=<?php echo urlencode($cat['folder']); ?>" class="text-blue-600 hover:underline">進入投票</a>
+            <a href="category.php?category=<?php echo urlencode($cat['folder']); ?>" class="text-blue-600 font-bold hover:underline">進入投票</a>
           </div>
         <?php endforeach; ?>
       </div>

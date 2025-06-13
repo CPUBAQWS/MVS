@@ -24,6 +24,9 @@ $categories = file_exists($categoryFile) ? json_decode(file_get_contents($catego
   <header class="bg-blue-700 text-white p-4 text-center text-xl font-semibold">
     管理介面
   </header>
+  <nav class="max-w-6xl mx-auto mt-4 px-4">
+    <a href="index.html" class="text-blue-600 hover:underline">&larr; 回到首頁</a>
+  </nav>
   <main class="max-w-6xl mx-auto p-6 space-y-8">
 
     <section class="bg-white p-4 rounded shadow">
