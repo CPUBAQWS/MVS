@@ -1,11 +1,44 @@
-# Protect sensitive directories from direct web access
+# ================================================
+# .htaccess: Secure Sensitive Directories
+# ================================================
+
+# ------------------------------------------------------------------
+# 1. Pretend Sensitive Directories Don't Exist (return 404)
+# ------------------------------------------------------------------
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  # Deny any request for the data or Files directories
-  RewriteRule ^(?:data)/ - [F,L]
+  # Return 404 Not Found for any direct request to /data/
+  RewriteRule ^data/ - [R=404,L]
 </IfModule>
 
-# Fallback for servers without mod_rewrite
-<FilesMatch "^(?:data)/">
+# ------------------------------------------------------------------
+# 2. Deny access to known backup and sensitive file types
+# ------------------------------------------------------------------
+<FilesMatch "\.(bak|old|swp|tmp|log|sql|ini|conf)$">
   Require all denied
 </FilesMatch>
+
+# ------------------------------------------------------------------
+# 3. Disable Directory Listing
+# ------------------------------------------------------------------
+Options -Indexes
+
+# ------------------------------------------------------------------
+# 4. Restrict HTTP Methods (Allow only safe ones)
+# ------------------------------------------------------------------
+<LimitExcept GET POST HEAD>
+  Require all denied
+</LimitExcept>
+
+# ------------------------------------------------------------------
+# 5. Optional: Set Default Charset and prevent MIME sniffing
+# ------------------------------------------------------------------
+AddDefaultCharset utf-8
+Header set X-Content-Type-Options "nosniff"
+
+# ------------------------------------------------------------------
+# 6. Optional: Prevent access to .htaccess itself
+# ------------------------------------------------------------------
+<Files ".htaccess">
+  Require all denied
+</Files>
