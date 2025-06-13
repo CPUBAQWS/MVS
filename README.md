@@ -1,6 +1,6 @@
-# 🗳️ Family Media Voting Website
+# 🗳️ Family Media Voting
 
-A lightweight, privacy-respecting voting platform designed for families to browse and vote on shared media — such as photos, videos, PDFs, and creative content — organized by category.
+A lightweight, privacy-respecting voting platform designed for families or friends to browse and vote on shared media, such as photos, videos, PDFs, and creative content organized by category.
 
 This project emphasizes ease of use, anonymous access, and zero dependencies on external databases.
 
