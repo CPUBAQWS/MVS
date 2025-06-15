@@ -4,6 +4,26 @@ require_once __DIR__.'/inc/i18n.php';
 $langAttr = get_lang();
 $languages = array_map(function($f){return basename($f,'.php');}, glob(__DIR__.'/lang/*.php'));
 $langNames = ['en' => t('english'), 'zh' => t('chinese')];
+
+$catFile = __DIR__ . '/data/categories.json';
+$categories = file_exists($catFile) ? json_decode(file_get_contents($catFile), true) : [];
+$catFolders = array_column($categories, 'folder');
+$totalMedia = 0;
+$pendingMedia = 0;
+if (is_dir(__DIR__ . '/Files')) {
+    foreach (glob(__DIR__ . '/Files/*') as $dir) {
+        if (!is_dir($dir)) continue;
+        $files = array_filter(scandir($dir), function($f) use ($dir){
+            return is_file("$dir/$f") && !in_array($f, ['.', '..']);
+        });
+        $folderName = basename($dir);
+        if (in_array($folderName, $catFolders)) {
+            $totalMedia += count($files);
+        } else {
+            $pendingMedia += count($files);
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars($langAttr); ?>">
@@ -29,6 +49,7 @@ $langNames = ['en' => t('english'), 'zh' => t('chinese')];
           <input type="text" name="code" placeholder="<?php echo t('enter_access_code'); ?>" required class="w-full border p-2 mb-4 rounded">
           <button type="submit" class="bg-green-600 text-white px-4 py-2 w-full rounded"><?php echo t('start_voting'); ?></button>
         </form>
+        <p class="text-xs text-center text-gray-500 mt-1"><?php echo $totalMedia . '/' . $pendingMedia; ?></p>
       </div>
       <hr class="my-4 border-gray-300">
       <details class="border rounded">

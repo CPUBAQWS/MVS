@@ -75,5 +75,7 @@ return [
     'missing_category_or_rule' => '缺少分類名稱或規則',
     'language' => '語言',
     'english' => 'English',
-    'chinese' => '中文'
+    'chinese' => '中文',
+    'submit_files' => '提交檔案',
+    'upload_success' => '檔案已提交，將在24小時內於分類中顯示。'
 ];
