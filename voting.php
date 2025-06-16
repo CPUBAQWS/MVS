@@ -20,6 +20,10 @@ $available = [];
 
 foreach ($dirs as $dir) {
     $folderName = basename($dir);
+    // Skip upload subfolders such as "cat_xxxxx"
+    if (strpos($folderName, '_') !== false) {
+        continue;
+    }
     $catData = $categoryMap[$folderName] ?? [];
     if (isset($catData['enabled']) && !$catData['enabled']) {
         continue; // skip disabled categories
