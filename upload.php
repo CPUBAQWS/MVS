@@ -38,7 +38,7 @@ $langAttr = get_lang();
 <html lang="<?php echo htmlspecialchars($langAttr); ?>">
 <head>
     <meta charset="UTF-8">
-    <title><?php echo t('submit_files'); ?></title>
+    <title><?php echo htmlspecialchars(t('submit_files')); ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-4 text-gray-800">
@@ -56,7 +56,7 @@ $langAttr = get_lang();
             </select>
         </label>
         <input type="file" name="files[]" multiple class="border p-2 w-full rounded">
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-full"><?php echo t('submit_files'); ?></button>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-full"><?php echo htmlspecialchars(t('submit_files')); ?></button>
     </form>
 </div>
 </body>

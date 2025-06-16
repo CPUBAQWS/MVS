@@ -49,17 +49,17 @@ if (is_dir(__DIR__ . '/Files')) {
           <input type="text" name="code" placeholder="<?php echo t('enter_access_code'); ?>" required class="w-full border p-2 mb-4 rounded">
           <button type="submit" class="bg-green-600 text-white px-4 py-2 w-full rounded"><?php echo t('start_voting'); ?></button>
         </form>
-        <p class="text-xs text-center text-gray-500 mt-1"><?php echo $totalMedia . '/' . $pendingMedia; ?></p>
-      </div>
-      <hr class="my-4 border-gray-300">
-      <details class="border rounded">
-        <summary class="text-xl font-bold mb-2 text-center py-2 cursor-pointer select-none"><?php echo t('admin_login'); ?></summary>
-        <div class="p-2">
+        </div>
+        <hr class="my-4 border-gray-300">
+        <details class="border rounded">
+          <summary class="text-xl font-bold mb-2 text-center py-2 cursor-pointer select-none"><?php echo t('admin_login'); ?></summary>
+          <div class="p-2">
           <form id="adminForm">
             <input type="text" name="username" placeholder="<?php echo t('admin_username'); ?>" required class="w-full border p-2 mb-2 rounded">
             <input type="password" name="password" placeholder="<?php echo t('password'); ?>" required class="w-full border p-2 mb-4 rounded">
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 w-full rounded"><?php echo t('login_admin'); ?></button>
           </form>
+          <p class="text-xs text-center text-gray-500 mt-2"><?php echo $totalMedia . '/' . $pendingMedia; ?></p>
         </div>
       </details>
       <p id="status" class="mt-2 text-center text-sm text-red-600"></p>

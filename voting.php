@@ -51,7 +51,7 @@ $langAttr = get_lang();
   </header>
   <nav class="max-w-4xl mx-auto mt-4 px-4 flex justify-between items-center">
     <a href="index.php" class="text-blue-600 hover:underline">&larr; <?php echo t('back_home'); ?></a>
-    <button onclick="window.open('upload.php','uploadWin','width=500,height=400');" class="text-blue-600 hover:underline text-sm"><?php echo t('submit_files'); ?></button>
+    <button onclick="window.open('upload.php','uploadWin','width=500,height=400');" class="text-blue-600 hover:underline text-sm"><?php echo htmlspecialchars(t('submit_files')); ?></button>
   </nav>
 
   <main class="max-w-4xl mx-auto p-6 space-y-8">
