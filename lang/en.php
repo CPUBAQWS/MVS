@@ -75,5 +75,7 @@ return [
     'missing_category_or_rule' => 'Missing category name or rule',
     'language' => 'Language',
     'english' => 'English',
-    'chinese' => '中文'
+    'chinese' => '中文',
+    'submit_files' => 'Submit Files',
+    'upload_success' => 'Files submitted, they\'ll be available within 24 hours.'
 ];
