@@ -118,7 +118,8 @@ const maxVotes = <?php echo $maxVotes; ?>;
 const allowVote = <?php echo $allowVote ? 'true' : 'false'; ?>;
 
 function updateUI() {
-  document.getElementById("usedVotes").textContent = userVotes.length;
+  const votesElem = document.getElementById("usedVotes");
+  if (votesElem) votesElem.textContent = userVotes.length;
   voteBtns.forEach(btn => {
     const file = btn.dataset.file;
     const isVoted = userVotes.includes(file);
