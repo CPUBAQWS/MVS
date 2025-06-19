@@ -43,6 +43,15 @@ if ($rule === 'single') {
     $maxVotes = 3;
 }
 
+$ruleMap = [
+    'single' => t('one_vote'),
+    'multi_unique' => t('multi_unique')
+];
+$ruleLabel = $ruleMap[$rule] ?? $rule;
+if ($rule === 'multi_unique') {
+    $ruleLabel .= ' (' . sprintf(t('max_votes_format'), $maxVotes) . ')';
+}
+
 $userVotes = $votes[$userCode][$folder] ?? [];
 $langAttr = get_lang();
 ?>
@@ -65,7 +74,7 @@ $langAttr = get_lang();
 
 <section class="p-4 max-w-6xl mx-auto text-center">
   <p class="text-gray-700 mb-2"><?php echo sprintf(t('used_votes'), count($userVotes), $maxVotes); ?></p>
-  <p class="text-sm text-gray-600"><?php echo sprintf(t('rule_colon'), $rule); ?></p>
+  <p class="text-sm text-gray-600"><?php echo sprintf(t('rule_colon'), htmlspecialchars($ruleLabel)); ?></p>
   <?php if (!$allowVote): ?>
     <p class="text-red-600 text-sm mt-1"><?php echo t('category_view_only'); ?></p>
   <?php endif; ?>
