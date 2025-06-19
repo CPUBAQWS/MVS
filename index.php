@@ -29,6 +29,7 @@ if (is_dir(__DIR__ . '/Files')) {
 <html lang="<?php echo htmlspecialchars($langAttr); ?>">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?php echo t('login_title'); ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>

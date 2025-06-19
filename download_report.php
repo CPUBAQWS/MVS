@@ -34,7 +34,7 @@ header('Content-Type: text/html; charset=UTF-8');
 header('Content-Disposition: attachment; filename="vote_report.html"');
 
 $langAttr = get_lang();
-echo "<!DOCTYPE html><html lang=\"$langAttr\"><head><meta charset=\"UTF-8\"><title>" . t('vote_report_title') . "</title>";
+echo "<!DOCTYPE html><html lang=\"$langAttr\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>" . t('vote_report_title') . "</title>";
 echo "<style>body{font-family:sans-serif;}table{border-collapse:collapse;margin-bottom:20px;}th,td{border:1px solid #ccc;padding:4px 8px;text-align:left;}th{background:#f0f0f0;}</style></head><body>";
 echo "<h1>" . t('vote_results_report') . "</h1>";
 foreach ($result as $catName => $files) {
