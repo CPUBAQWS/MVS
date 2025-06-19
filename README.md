@@ -10,37 +10,22 @@ A lightweight, self-hosted voting platform for families or friends to share and 
 - Vote on images, videos, PDFs, YouTube links and text snippets  
 - Supports two voting rules:
   - `single` – one vote per user
-  - `multi_unique` – multiple votes per category with no duplicates  
-- Users can cancel votes  
+  - `multi_unique` – multiple votes per category with no duplicates
+  - Users can cancel votes  
 - Media previews with image zoom, video playback and PDF/YouTube embeds  
-- English and Chinese translations (switchable on every page)  
-- Admin interface to create categories, upload/remove media and generate user codes  
+- English and Chinese options on the login page  
+- Users can access using pre-assigned codes; no registration is required   
 - Download vote results as an HTML report  
-
----
-
-## 📁 Directory Layout
-
-```
-/                Project root
-├── index.php            # Login page for users and admin
-├── voting.php           # Category list page
-├── category.php         # Voting page for a single category
-├── admin.php            # Admin dashboard
-├── data/                # JSON storage
-├── lang/                # Language files (en.php, zh.php)
-├── inc/                 # Helper library (i18n)
-├── Files/               # Uploaded media (created at runtime, not tracked)
-└── .htaccess            # Security rules for Apache
-```
 
 ---
 
 ## ⬆️ Uploading Media Files
 
-Once a voting category is created via the admin dashboard, you can upload media directly into the corresponding subfolder under the `Files/` directory.
+Once a voting category is created via the admin dashboard, you can upload media directly into the corresponding subfolder under the Files/ directory.
 
-To do this, use **FTP**, **SFTP**, or any method to access your server's file system. Simply place supported files (e.g., `.jpg`, `.mp4`, `.pdf`) into the appropriate category folder. These files will automatically be shown on the relevant voting page.
+This can be done using FTP, SFTP, or any method that provides access to your server’s file system. Simply place supported files (e.g., .jpg, .mp4, .pdf) into the appropriate category folder—these files will automatically appear on the relevant voting page.
+
+Alternatively, a upload button (beta) is available to users, allowing them to submit media files without server access. Files uploaded this way will be stored in a staging folder. Admins can then manually review and move these files to the appropriate category folders for them to become visible on the voting pages.
 
 ---
 
@@ -51,7 +36,7 @@ To embed a YouTube video as a voting item:
 1. Create a plain text file with any name ending in `.yt`, for example: `funnyvideo.yt`
 2. Paste the full YouTube URL on a single line:
    ```
-   https://www.youtube.com/watch?v=dQw4w9WgXcQ
+   https://www.youtube.com/watch?v=SAMPLELINK
    ```
 3. Upload this `.yt` file into the correct category folder under `Files/`.
 
@@ -80,7 +65,7 @@ The system will automatically display the video using an embedded YouTube player
    ```
 5. Open your browser and navigate to `http://localhost` or your deployed server URL.
 
-Use the admin dashboard to create categories and generate participant access codes.
+Use the admin dashboard to create categories and generate user access codes.
 
 ---
 
