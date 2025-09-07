@@ -85,4 +85,10 @@ Translation files are stored in the `lang/` directory. To add a new language:
 
 ---
 
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
 This project aims to be simple, flexible, and self-contained. Suggestions and improvements are always welcome!
